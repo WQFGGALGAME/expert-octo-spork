@@ -1,0 +1,53 @@
+/* ============================================================
+   MERIDIAN · 07 动效 (Keyframes / Reduced motion)
+   只保留被实际引用的关键帧，引用方见注释：
+     04-components .menu          → menu-in
+     05-overlays   .palette       → palette-scale
+     05-overlays   .modal         → dialog-pop
+     05-overlays   .toast         → toast-in / toast-out
+     07            .just-completed → pop-once（app.js 在勾选完成时挂类）
+   ============================================================ */
+
+@keyframes menu-in {
+  from { opacity: 0; transform: translateY(-6px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes palette-scale {
+  from { opacity: 0; transform: translateY(10px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes dialog-pop {
+  from { opacity: 0; transform: translateY(14px) scale(0.98); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes toast-in {
+  from { opacity: 0; transform: translateY(16px) scale(0.94); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes toast-out {
+  from { opacity: 1; transform: translateY(0) scale(1); }
+  to   { opacity: 0; transform: translateY(10px) scale(0.96); }
+}
+
+/* 完成瞬间的轻脉冲（复选框） */
+@keyframes pop-once {
+  0%   { transform: scale(1); }
+  45%  { transform: scale(1.22); }
+  100% { transform: scale(1); }
+}
+.task-item.just-completed .task-checkbox { animation: pop-once var(--dur-base) var(--ease-spring); }
+
+/* ---------------- 尊重减少动态 ---------------- */
+/* 注意：本块必须留在文件末尾且括号配对完整，否则会被上方未闭合的
+   @keyframes 吞掉（曾经就因为少写一个右括号导致整段失效）。 */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
